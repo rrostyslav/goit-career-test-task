@@ -39,9 +39,7 @@ type CampersResponse = {
 
 export const campersApi = createApi({
   reducerPath: "campersApi",
-  baseQuery: axiosBaseQuery({
-    baseUrl: "https://66b1f8e71ca8ad33d4f5f63e.mockapi.io",
-  }),
+  baseQuery: axiosBaseQuery(),
   tagTypes: ["Campers"],
   endpoints: (builder) => ({
     getCampers: builder.query<CampersResponse, void>({

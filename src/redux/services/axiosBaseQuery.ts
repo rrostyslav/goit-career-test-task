@@ -21,15 +21,11 @@ type AxiosBaseQueryError = {
 };
 
 export const axiosBaseQuery =
-  ({ baseUrl = "" }: { baseUrl?: string } = {}): BaseQueryFn<
-    AxiosBaseQueryArgs,
-    unknown,
-    AxiosBaseQueryError
-  > =>
+  (): BaseQueryFn<AxiosBaseQueryArgs, unknown, AxiosBaseQueryError> =>
   async ({ url, method = "GET", data, params, headers }) => {
     try {
       const result = await axiosInstance({
-        url: baseUrl + url,
+        url,
         method,
         data,
         params,
