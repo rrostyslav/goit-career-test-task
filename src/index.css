@@ -1,6 +1,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 @import "tailwindcss";
 
+:root {
+  /* for dynamic values from react props */
+  --color-main: #101828;
+  --color-text: #475467;
+  --color-gray: #6C717B;
+  --color-button: #E44848;
+  --color-button-hover: #D84343;
+  --color-rating: #FFC531;
+  --color-gray-light: #DADDE1;
+  --color-badges: #F2F4F7;
+  --color-inputs: #F7F7F7;
+  --color-white: #FFFFFF;
+  --color-inherit: inherit;
+
+  font-family: Inter, sans-serif;
+}
+
+html, body {
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+}
+
 @theme {
   --color-*: initial;
   --color-main: #101828;
