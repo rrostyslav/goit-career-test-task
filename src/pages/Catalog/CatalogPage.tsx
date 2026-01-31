@@ -1,8 +1,8 @@
-import TruckCardImage from "@/assets/images/truck-card.png";
 import { Typography } from "@/components/Typography";
 import { Icon } from "@/components/Icon";
 import { Button } from "@/components/Button";
 import type { TIconName } from "@/components/Icon/icons.ts";
+import { useGetCampersQuery } from "@/redux/services/api.ts";
 
 const createTruckFeature =
   ({ icon, label }: { icon: TIconName; label: string }) =>
@@ -37,41 +37,66 @@ const ACFeature = createTruckFeature({
   label: "AC",
 });
 
+type TFeatures = Partial<
+  Record<"automatic" | "petrol" | "kitchen" | "ac", boolean>
+>;
+
 type TruckFeaturesProps = {
-  features: Partial<Record<"automatic" | "petrol" | "kitchen" | "ac", boolean>>;
+  features: TFeatures;
 };
 
 const TruckFeatures = ({ features }: TruckFeaturesProps) => {
   return (
     <div className="flex-1 flex gap-2 flex-wrap">
-      {features.automatic && <AutomaticFeature />}
-      {features.petrol && <PetrolFeature />}
-      {features.kitchen && <KitchenFeature />}
-      {features.ac && <ACFeature />}
+      {features?.automatic && <AutomaticFeature />}
+      {features?.petrol && <PetrolFeature />}
+      {features?.kitchen && <KitchenFeature />}
+      {features?.ac && <ACFeature />}
     </div>
   );
 };
 
-const TruckCard = () => {
+type TruckCardProps = {
+  name: string;
+  price: number;
+  rating: number;
+  reviewsCount: number;
+  image: string | undefined;
+  description: string | undefined;
+  features: TFeatures;
+};
+
+const TruckCard = ({
+  name,
+  price,
+  rating,
+  reviewsCount,
+  image,
+  features,
+  description,
+}: TruckCardProps) => {
   return (
     <div className="flex p-[24px] gap-x-[24px] w-[888px] border border-solid border-gray-light rounded-[20px]">
       <div className="w-[292px] h-[320px] overflow-hidden">
-        <img
-          src={TruckCardImage}
-          alt="Truck"
-          className="w-full h-full object-cover object-left"
-        />
+        {image ? (
+          <img
+            src={image}
+            alt="Truck"
+            className="w-full h-full object-cover object-center"
+          />
+        ) : // todo add image placeholder
+        null}
       </div>
 
       <div className="flex flex-col flex-1 gap-y-6">
         <div className="flex flex-col">
           <div className="flex justify-between">
             <Typography name="h2" color="main">
-              Mavericks
+              {name}
             </Typography>
             <div className="flex gap-x-[12px] items-center">
               <Typography name="h2" color="main">
-                €8000.00
+                €{price}
               </Typography>
               <Icon name="favourite" size="24x24" />
             </div>
@@ -81,7 +106,7 @@ const TruckCard = () => {
             <div className="flex gap-x-1 items-center">
               <Icon name="rating" />
               <Typography name="body" color="main">
-                4.4(2 Reviews)
+                {rating}({reviewsCount} Reviews)
               </Typography>
             </div>
 
@@ -95,15 +120,10 @@ const TruckCard = () => {
         </div>
 
         <Typography name="body" color="text">
-          Embrace simplicity and freedom with the Mavericks panel truck...
+          {description}
         </Typography>
 
-        <TruckFeatures
-          features={{
-            automatic: true,
-            ac: true,
-          }}
-        />
+        <TruckFeatures features={features} />
 
         <Button>Show more</Button>
       </div>
@@ -112,5 +132,27 @@ const TruckCard = () => {
 };
 
 export const CatalogPage = () => {
-  return <TruckCard />;
+  const { data } = useGetCampersQuery();
+
+  return (
+    <div>
+      {data?.items.map((truck) => (
+        <TruckCard
+          key={truck.name}
+          name={truck.name}
+          rating={truck.rating}
+          price={truck.price}
+          reviewsCount={truck.reviews.length}
+          image={truck.gallery.at(0)?.thumb}
+          description={truck.description}
+          features={{
+            automatic: truck.transmission === "automatic",
+            petrol: truck.engine === "diesel",
+            kitchen: truck.kitchen,
+            ac: truck.AC,
+          }}
+        />
+      ))}
+    </div>
+  );
 };

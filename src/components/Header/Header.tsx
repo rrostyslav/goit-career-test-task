@@ -26,6 +26,7 @@ export const Header = () => {
         <div className="flex gap-x-8">
           {navigation.map((navItem) => (
             <NavLink
+              key={navItem.to}
               to={navItem.to}
               className={(props) => (props.isActive ? "text-button-hover" : "")}
             >

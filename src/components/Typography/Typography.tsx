@@ -1,4 +1,4 @@
-import type { CSSProperties, JSX } from "react";
+import type { CSSProperties, JSX, ReactNode } from "react";
 import {
   type TTypographyName,
   typography,
@@ -11,7 +11,7 @@ type TTypographyProps = {
   name: TTypographyName;
   color: TColor;
   as?: keyof JSX.IntrinsicElements;
-  children: string;
+  children: ReactNode;
 };
 
 export const Typography = ({
