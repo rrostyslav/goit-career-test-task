@@ -30,11 +30,19 @@ const TruckList = ({ campers }: TruckListProps) => {
 };
 
 export const CatalogPage = () => {
-  const { data } = useGetCampersQuery();
+  const { data, isLoading, isFetching } = useGetCampersQuery();
+  const isPending = isLoading || isFetching;
 
   return (
     <div className="flex justify-center">
-      <TruckList campers={data?.items ?? []} />
+      {isPending ? (
+        <div className="flex items-center gap-x-3 py-10 text-[16px] font-medium text-[var(--color-text)]">
+          <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border-4 border-[var(--color-badges)] border-t-[var(--color-button)] animate-spin" />
+          Loading catalog...
+        </div>
+      ) : (
+        <TruckList campers={data?.items ?? []} />
+      )}
     </div>
   );
 };
