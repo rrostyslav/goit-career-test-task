@@ -1,7 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { axiosBaseQuery } from "@/redux/services/axiosBaseQuery.ts";
 
-type Camper = {
+export type Camper = {
   id: string;
   name: string;
   price: number;
